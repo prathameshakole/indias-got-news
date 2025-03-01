@@ -15,7 +15,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import NewsCard from './newscard';
 
-// Sample data with descriptions
 export const newsItems = [
   {
     id: 1,

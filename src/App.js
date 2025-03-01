@@ -74,76 +74,20 @@ export const itemData = [
     category: 'Environment'
   },
   {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breaking News',
-    author: '@bkristastucchio',
-    description: 'This is the full article content for the Breaking News story. It contains detailed information about the event, quotes from witnesses, and analysis from experts.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Technology Update',
-    author: '@rollelflex_graphy726',
-    description: 'The latest technology trends and updates from around the world. This article explores recent innovations, product launches, and market developments.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-    author: '@helloimnik',
-    description: 'An in-depth review of the latest camera technology. This article discusses features, specifications, performance metrics, and comparison with competing products.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-    author: '@nolanissac',
-    description: 'A journey through the world of specialty coffee. This article covers brewing methods, bean varieties, roasting techniques, and the cultural significance of coffee.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats',
-    author: '@hjrc33',
-    description: 'The latest fashion trends in headwear. This article explores different styles, materials, cultural influences, and celebrity fashion statements.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil',
-    description: 'The fascinating world of honey production. This article discusses beekeeping, honey varieties, health benefits, and environmental importance of bees.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-    author: '@tjdragotta',
-    description: 'Basketball season highlights and analysis. This article covers recent games, player statistics, team strategies, and championship predictions.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-    author: '@katie_wasserman',
-    description: 'All about ferns and their role in ecosystems. This article discusses different species, growing conditions, ecological importance, and decorative uses.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms',
-    author: '@silverdalex',
-    description: 'The mysterious world of mushrooms. This article explores different varieties, culinary uses, medicinal properties, and ecological significance.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-    author: '@shelleypauls',
-    description: 'Classic culinary combinations. This article provides recipes, cooking techniques, nutritional information, and cultural history of tomato and basil.'
-  },
-  {
+    id: 9,
     img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
     title: 'Sea star',
     author: '@peterlaster',
-    description: 'Marine life exploration focusing on sea stars. This article discusses different species, habitat, ecological role, and conservation efforts.'
+    description: 'Marine life exploration focusing on sea stars. This article discusses different species, habitat, ecological role, and conservation efforts.',
+    category: 'Environment'
   },
   {
+    id: 10,
     img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
     title: 'Bike',
     author: '@southside_customs',
-    description: 'The world of custom bikes and cycling culture. This article covers design trends, technical innovations, community events, and notable custom builders.'
+    description: 'The world of custom bikes and cycling culture. This article covers design trends, technical innovations, community events, and notable custom builders.',
+    category: 'Environment'
   },
 ];
 
