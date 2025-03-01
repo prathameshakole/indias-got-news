@@ -1,14 +1,22 @@
-
-import { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { 
+  Box, 
+  IconButton, 
+  Typography,
+  Paper,
+  useMediaQuery,
+  Container,
+  Grid2,
+  Fade
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Typography } from '@mui/material';
 import NewsCard from './newscard';
-import Header from './header';
 
-export const itemData = [
+// Sample data with descriptions
+export const newsItems = [
   {
     id: 1,
     img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
@@ -72,85 +80,18 @@ export const itemData = [
     author: '@katie_wasserman',
     description: 'India\'s biodiversity conservation projects are showing promising results in protecting endangered species and their habitats. Community-led initiatives in forest management have reduced poaching while creating sustainable livelihoods for tribal populations. Marine conservation areas along the coastline are helping restore coral reefs and fish stocks. Scientists are documenting previously unknown species, highlighting the importance of preserving these rich ecosystems for future generations.',
     category: 'Environment'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-    title: 'Breaking News',
-    author: '@bkristastucchio',
-    description: 'This is the full article content for the Breaking News story. It contains detailed information about the event, quotes from witnesses, and analysis from experts.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-    title: 'Technology Update',
-    author: '@rollelflex_graphy726',
-    description: 'The latest technology trends and updates from around the world. This article explores recent innovations, product launches, and market developments.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-    title: 'Camera',
-    author: '@helloimnik',
-    description: 'An in-depth review of the latest camera technology. This article discusses features, specifications, performance metrics, and comparison with competing products.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-    title: 'Coffee',
-    author: '@nolanissac',
-    description: 'A journey through the world of specialty coffee. This article covers brewing methods, bean varieties, roasting techniques, and the cultural significance of coffee.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-    title: 'Hats',
-    author: '@hjrc33',
-    description: 'The latest fashion trends in headwear. This article explores different styles, materials, cultural influences, and celebrity fashion statements.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-    title: 'Honey',
-    author: '@arwinneil',
-    description: 'The fascinating world of honey production. This article discusses beekeeping, honey varieties, health benefits, and environmental importance of bees.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-    title: 'Basketball',
-    author: '@tjdragotta',
-    description: 'Basketball season highlights and analysis. This article covers recent games, player statistics, team strategies, and championship predictions.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-    title: 'Fern',
-    author: '@katie_wasserman',
-    description: 'All about ferns and their role in ecosystems. This article discusses different species, growing conditions, ecological importance, and decorative uses.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-    title: 'Mushrooms',
-    author: '@silverdalex',
-    description: 'The mysterious world of mushrooms. This article explores different varieties, culinary uses, medicinal properties, and ecological significance.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-    title: 'Tomato basil',
-    author: '@shelleypauls',
-    description: 'Classic culinary combinations. This article provides recipes, cooking techniques, nutritional information, and cultural history of tomato and basil.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-    title: 'Sea star',
-    author: '@peterlaster',
-    description: 'Marine life exploration focusing on sea stars. This article discusses different species, habitat, ecological role, and conservation efforts.'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-    title: 'Bike',
-    author: '@southside_customs',
-    description: 'The world of custom bikes and cycling culture. This article covers design trends, technical innovations, community events, and notable custom builders.'
-  },
+  }
 ];
 
-function App() {
+function HomePage() {
   const [cardIndex, setCardIndex] = useState(0);
   const [showDescription, setShowDescription] = useState(false);
-  const totalCards = itemData.length;
+  const totalCards = newsItems.length;
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
 
   const handleSwipeUp = () => {
     if (cardIndex < totalCards - 1) {
@@ -174,123 +115,219 @@ function App() {
     setShowDescription(false);
   };
 
-  const handleScroll = (e) => {
-    if (e.target.scrollTop + e.target.offsetHeight >= e.target.scrollHeight) {
+  useEffect(() => {
+    setShowDescription(false);
+  }, [isMobile, isTablet, isDesktop]);
+
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientY);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isSwipeDown = distance < -50;
+    const isSwipeUp = distance > 50;
+    
+    if (isSwipeUp) {
       handleSwipeUp();
-    } else if (e.target.scrollTop === 0) {
+    }
+    if (isSwipeDown) {
       handleSwipeDown();
     }
+    
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   return (
-    <>
-      <Header />
+    <Container maxWidth="xl">
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-          height: 'calc(100vh - 80px)', 
-          overflow: 'hidden',
+          pt: 3,
+          pb: 5,
+          minHeight: 'calc(100vh - 80px)',
           position: 'relative',
-          touchAction: 'pan-y',
         }}
-        onScroll={handleScroll}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-  
-        <Box sx={{ position: 'absolute', top: 20, right: 20, zIndex: 10 }}>
+        <Typography variant="h4" component="h1" gutterBottom align="center" sx={{ mb: 4 }}>
+          Today's Top Stories
+        </Typography>
+
+        <Box sx={{ 
+          position: 'fixed', 
+          right: 20, 
+          top: '50%', 
+          transform: 'translateY(-50%)',
+          zIndex: 10,
+          display: { xs: 'none', sm: 'block' }
+        }}>
           <IconButton 
             onClick={handleSwipeDown} 
             disabled={cardIndex === 0}
-            sx={{ bgcolor: 'rgba(255,255,255,0.7)', mb: 1 }}
+            sx={{ 
+              mb: 1, 
+              bgcolor: 'background.paper', 
+              boxShadow: 2,
+              '&:hover': { bgcolor: 'background.default' },
+              opacity: cardIndex === 0 ? 0.5 : 1
+            }}
           >
             <KeyboardArrowUpIcon />
           </IconButton>
           <IconButton 
             onClick={handleSwipeUp} 
             disabled={cardIndex === totalCards - 1}
-            sx={{ bgcolor: 'rgba(255,255,255,0.7)' }}
+            sx={{ 
+              bgcolor: 'background.paper', 
+              boxShadow: 2,
+              '&:hover': { bgcolor: 'background.default' },
+              opacity: cardIndex === totalCards - 1 ? 0.5 : 1
+            }}
           >
             <KeyboardArrowDownIcon />
           </IconButton>
         </Box>
-      
-        {/* This is the parent box */}
+
+       
+        {isMobile ? (
+         
+          <Box sx={{ width: '100%' }}>
+            <Fade in={!showDescription}>
+              <Box sx={{ display: showDescription ? 'none' : 'block' }}>
+                <Box 
+                  onClick={handleCardClick} 
+                  sx={{ cursor: 'pointer', mx: 'auto', maxWidth: '100%' }}
+                >
+                  <NewsCard cardData={newsItems[cardIndex]} />
+                </Box>
+              </Box>
+            </Fade>
+
+            {/* Description view */}
+            <Fade in={showDescription}>
+              <Box sx={{ display: !showDescription ? 'none' : 'block' }}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    p: 3,
+                    borderRadius: 2,
+                    mb: 2
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <IconButton 
+                      onClick={handleBackClick} 
+                      sx={{ mr: 1 }}
+                      color="primary"
+                    >
+                      <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h5">
+                      {newsItems[cardIndex].title}
+                    </Typography>
+                  </Box>
+                  
+                  <Typography variant="body1" paragraph>
+                    {newsItems[cardIndex].description}
+                  </Typography>
+                  
+                  <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
+                    <Typography variant="subtitle1" color="text.secondary">
+                      by: {newsItems[cardIndex].author}
+                    </Typography>
+                    <Typography variant="subtitle1" color="primary.main">
+                      {newsItems[cardIndex].category}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Box>
+            </Fade>
+          </Box>
+        ) : (
+
+          <Grid2 container spacing={3}>
+            <Grid2 item xs={12} md={showDescription ? 5 : 12}>
+              <Box 
+                onClick={handleCardClick} 
+                sx={{ 
+                  cursor: 'pointer', 
+                  mx: 'auto', 
+                  maxWidth: 500, 
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <NewsCard cardData={newsItems[cardIndex]} />
+              </Box>
+            </Grid2>
+            
+            <Grid2 item xs={12} md={7} sx={{ display: showDescription ? 'block' : 'none' }}>
+              <Fade in={showDescription}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    p: 4,
+                    borderRadius: 2,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                    <IconButton 
+                      onClick={handleBackClick} 
+                      sx={{ mr: 2, display: { md: 'none' } }}
+                      color="primary"
+                    >
+                      <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h4">
+                      {newsItems[cardIndex].title}
+                    </Typography>
+                  </Box>
+                  
+                  <Typography variant="body1" paragraph sx={{ flexGrow: 1 }}>
+                    {newsItems[cardIndex].description}
+                  </Typography>
+                  
+                  <Box display="flex" justifyContent="space-between" alignItems="center" mt={3}>
+                    <Typography variant="subtitle1" color="text.secondary">
+                      by: {newsItems[cardIndex].author}
+                    </Typography>
+                    <Typography variant="subtitle1" color="primary.main" fontWeight="bold">
+                      {newsItems[cardIndex].category}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Fade>
+            </Grid2>
+          </Grid2>
+        )}
+
+        {/* Navigation dots */}
         <Box
           sx={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-            
-            // transform: `,
-          }}
-        >
-          {/* This is the news box */}
-          <Box
-            sx={{
-              width: showDescription ? '50%' : '100%',
-              height: '100%',
-              padding: 2,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              transition: 'width 0.3s ease',
-            }}
-            onClick={handleCardClick}
-          >
-            <NewsCard cardData={itemData[cardIndex]} />
-          </Box>
-
-          {/* This is the description box */}
-          <Box
-            sx={{
-              width: '50%',
-              display: showDescription ? 'block' : 'none',
-              height: '100%',
-              padding: 3,
-              bgcolor: 'background.paper',
-              boxShadow: 1,
-              overflow: 'auto',
-              transition: 'width 0.3s ease',
-            }}
-          >
-            <IconButton 
-              onClick={handleBackClick}
-              sx={{ mb: 2 }}
-            >
-              <ArrowBackIcon />
-            </IconButton>
-            
-            <Typography variant="h4" gutterBottom>
-              {itemData[cardIndex].title}
-            </Typography>
-            
-            <Typography variant="body1" paragraph>
-              {itemData[cardIndex].description || 
-                `This is a detailed article about ${itemData[cardIndex].title}. 
-                 The full content would appear here, allowing users to read the complete 
-                 story after clicking on the card preview.`}
-            </Typography>
-            
-            <Typography variant="subtitle1" color="text.secondary">
-              by: {itemData[cardIndex].author}
-            </Typography>
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            position: 'absolute',
+            position: 'fixed',
             bottom: 16,
             left: 0,
             right: 0,
             display: 'flex',
             justifyContent: 'center',
             gap: 1,
+            zIndex: 5
           }}
         >
-          {itemData.map((_, idx) => (
+          {newsItems.map((_, idx) => (
             <Box
               key={idx}
               sx={{
@@ -298,13 +335,19 @@ function App() {
                 height: 8,
                 borderRadius: '50%',
                 bgcolor: idx === cardIndex ? 'primary.main' : 'grey.400',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onClick={() => {
+                setCardIndex(idx);
+                setShowDescription(false);
               }}
             />
           ))}
         </Box>
       </Box>
-    </>
+    </Container>
   );
 }
 
-export default App;
+export default HomePage;
